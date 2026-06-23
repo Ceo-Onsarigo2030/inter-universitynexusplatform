@@ -89,10 +89,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "Inter–Universities Nexus Platform | B.A Connect Org." },
       { name: "description", content: "A flagship youth platform of B.A Connect Organization uniting universities across Kenya and beyond for talent, leadership, innovation and opportunity." },
       { name: "author", content: "B.A Connect Organization" },
-      { property: "og:title", content: "Inter–Universities Nexus Platform" },
-      { property: "og:description", content: "Uniting students across Kenya & Africa for talent, leadership, innovation and opportunity." },
+      { property: "og:title", content: "Inter–Universities Nexus Platform | B.A Connect Org." },
+      { property: "og:description", content: "A flagship youth platform of B.A Connect Organization uniting universities across Kenya and beyond for talent, leadership, innovation and opportunity." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "Inter–Universities Nexus Platform | B.A Connect Org." },
+      { name: "twitter:description", content: "A flagship youth platform of B.A Connect Organization uniting universities across Kenya and beyond for talent, leadership, innovation and opportunity." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/8d6bf4d9-3a30-45ca-8cba-cfdeb520f70c/id-preview-9157ca20--49d68a1c-22bb-4f34-ada8-2db75168ea8e.lovable.app-1782254119088.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/8d6bf4d9-3a30-45ca-8cba-cfdeb520f70c/id-preview-9157ca20--49d68a1c-22bb-4f34-ada8-2db75168ea8e.lovable.app-1782254119088.png" },
     ],
     links: [
       {
