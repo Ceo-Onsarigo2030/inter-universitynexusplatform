@@ -241,14 +241,16 @@ function FeedbackAdmin() {
   );
 }
 
+type ArticleRow = { id: string; title: string; slug: string; excerpt: string | null; body: string; category: string; status: string };
+
 function ArticlesAdmin() {
   const qc = useQueryClient();
   const { data } = useQuery({ queryKey: ["admin-articles"], queryFn: async () => (await supabase.from("articles").select("*").order("updated_at", { ascending: false })).data ?? [] });
   const [open, setOpen] = useState(false);
-  const [editing, setEditing] = useState<typeof data extends Array<infer T> | null ? T | null : never>(null as never);
+  const [editing, setEditing] = useState<ArticleRow | null>(null);
   return (
     <div className="space-y-4">
-      <div className="flex justify-end"><Button onClick={() => { setEditing(null as never); setOpen(!open); }} className="bg-primary text-primary-foreground"><Plus className="size-4" /> {open ? "Cancel" : "New article"}</Button></div>
+      <div className="flex justify-end"><Button onClick={() => { setEditing(null); setOpen(!open); }} className="bg-primary text-primary-foreground"><Plus className="size-4" /> {open ? "Cancel" : "New article"}</Button></div>
       {open && <ArticleForm initial={editing} onDone={() => { setOpen(false); qc.invalidateQueries({ queryKey: ["admin-articles"] }); qc.invalidateQueries({ queryKey: ["articles-all"] }); qc.invalidateQueries({ queryKey: ["articles-preview"] }); }} />}
       <div className="grid gap-3">
         {data?.map(a => (
@@ -259,7 +261,7 @@ function ArticlesAdmin() {
               {a.excerpt && <p className="text-sm text-muted-foreground line-clamp-2">{a.excerpt}</p>}
             </div>
             <div className="flex gap-1">
-              <Button variant="ghost" size="sm" onClick={() => { setEditing(a as never); setOpen(true); }}>Edit</Button>
+              <Button variant="ghost" size="sm" onClick={() => { setEditing(a as ArticleRow); setOpen(true); }}>Edit</Button>
               <Button variant="ghost" size="icon" onClick={async () => {
                 if (!confirm("Delete article?")) return;
                 const { error } = await supabase.from("articles").delete().eq("id", a.id);
@@ -274,7 +276,7 @@ function ArticlesAdmin() {
   );
 }
 
-function ArticleForm({ initial, onDone }: { initial: { id: string; title: string; slug: string; excerpt: string | null; body: string; category: string; status: string } | null; onDone: () => void }) {
+function ArticleForm({ initial, onDone }: { initial: ArticleRow | null; onDone: () => void }) {
   const [title, setTitle] = useState(initial?.title ?? "");
   const [slug, setSlug] = useState(initial?.slug ?? "");
   const [excerpt, setExcerpt] = useState(initial?.excerpt ?? "");
