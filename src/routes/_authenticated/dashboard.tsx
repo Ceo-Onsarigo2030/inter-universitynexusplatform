@@ -10,7 +10,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Shield, BadgeCheck } from "lucide-react";
+import { Shield, BadgeCheck, Accessibility, Calendar, MapPin } from "lucide-react";
+import { format } from "date-fns";
 import nexusLogo from "@/assets/nexus-logo.jpg.asset.json";
 import baLogo from "@/assets/ba-connect-logo.jpg.asset.json";
 
@@ -37,6 +38,22 @@ function Dashboard() {
       return !!data;
     }
   });
+  const { data: upcoming } = useQuery({
+    queryKey: ["upcoming-for-dashboard"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("programs").select("id,title,event_date,location,category").eq("is_published", true).gt("event_date", new Date().toISOString()).order("event_date", { ascending: true }).limit(5);
+      if (error) throw error;
+      return data;
+    },
+  });
+  const { data: myRsvps } = useQuery({
+    queryKey: ["my-rsvps", user?.id], enabled: !!user,
+    queryFn: async () => {
+      const { data, error } = await supabase.from("event_rsvps").select("id,program_id,ticket_tier,programs(title,event_date,location)").eq("user_id", user!.id);
+      if (error) throw error;
+      return data;
+    },
+  });
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -60,6 +77,34 @@ function Dashboard() {
             )}
           </div>
           <div className="space-y-6">
+            <div className="rounded-2xl border bg-card p-6 shadow-elegant">
+              <h2 className="heading-display text-2xl text-primary flex items-center gap-2"><Calendar className="size-5 text-gold" /> Upcoming events</h2>
+              <div className="mt-4 space-y-3">
+                {(upcoming ?? []).map(ev => (
+                  <div key={ev.id} className="rounded-lg border bg-secondary/40 p-3">
+                    <p className="text-[10px] uppercase tracking-widest text-accent font-semibold">{ev.category}</p>
+                    <p className="font-display text-lg text-primary">{ev.title}</p>
+                    {ev.event_date && <p className="text-xs text-muted-foreground flex items-center gap-1"><Calendar className="size-3" /> {format(new Date(ev.event_date), "PPP")}</p>}
+                    {ev.location && <p className="text-xs text-muted-foreground flex items-center gap-1"><MapPin className="size-3" /> {ev.location}</p>}
+                  </div>
+                ))}
+                {!upcoming?.length && <p className="text-sm text-muted-foreground">No upcoming events.</p>}
+              </div>
+              <Button asChild variant="outline" className="mt-4 w-full"><Link to="/programs">See all events</Link></Button>
+            </div>
+            {myRsvps && myRsvps.length > 0 && (
+              <div className="rounded-2xl border bg-card p-6 shadow-elegant">
+                <h2 className="heading-display text-2xl text-primary">My RSVPs</h2>
+                <ul className="mt-3 space-y-2 text-sm">
+                  {myRsvps.map(r => (
+                    <li key={r.id} className="flex justify-between items-center border-b pb-2 last:border-0">
+                      <span className="font-medium text-primary">{(r as { programs?: { title?: string } }).programs?.title ?? "Event"}</span>
+                      <span className="text-xs uppercase tracking-widest text-accent">{r.ticket_tier}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
             {profile && <ProfileEditor profile={profile} onSaved={refetch} />}
           </div>
         </div>
@@ -69,7 +114,7 @@ function Dashboard() {
   );
 }
 
-function IdCard({ profile }: { profile: { full_name: string; member_id: string; university: string; course: string | null; created_at: string } }) {
+function IdCard({ profile }: { profile: { full_name: string; member_id: string; university: string; course: string | null; created_at: string; has_disability?: boolean | null } }) {
   const initials = profile.full_name.split(/\s+/).slice(0,2).map(s => s[0]?.toUpperCase() ?? "").join("");
   return (
     <div className="relative rounded-2xl overflow-hidden shadow-gold border border-gold/40">
@@ -88,7 +133,7 @@ function IdCard({ profile }: { profile: { full_name: string; member_id: string; 
         <div className="flex items-center gap-4">
           <div className="size-20 rounded-full bg-ink text-gold grid place-items-center font-display text-3xl font-bold border-2 border-gold">{initials || "•"}</div>
           <div className="min-w-0">
-            <p className="text-[10px] uppercase tracking-widest text-muted-foreground">Member</p>
+            <p className="text-[10px] uppercase tracking-widest text-muted-foreground flex items-center gap-1">Member {profile.has_disability && <span className="inline-flex items-center gap-1 rounded-full bg-gold/20 text-ink px-2 py-0.5 text-[9px]"><Accessibility className="size-3" /> Inclusive</span>}</p>
             <p className="font-display text-2xl font-semibold text-primary truncate">{profile.full_name}</p>
             <p className="text-xs text-muted-foreground truncate">{profile.university}</p>
             {profile.course && <p className="text-xs text-muted-foreground truncate italic">{profile.course}</p>}
