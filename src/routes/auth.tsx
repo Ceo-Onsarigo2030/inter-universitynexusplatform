@@ -10,7 +10,9 @@ import { useAuth } from "@/lib/use-auth";
 import { useQuery } from "@tanstack/react-query";
 import { lovable } from "@/integrations/lovable";
 import { toast } from "sonner";
-import { Mail, Lock, User as UserIcon, GraduationCap } from "lucide-react";
+import { Mail, Lock, User as UserIcon } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({ meta: [
@@ -79,6 +81,8 @@ function SignUpForm() {
   const [university, setUniversity] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [hasDisability, setHasDisability] = useState(false);
+  const [disabilityType, setDisabilityType] = useState("");
   const [loading, setLoading] = useState(false);
   const { data: unis } = useQuery({
     queryKey: ["unis"],
@@ -88,10 +92,12 @@ function SignUpForm() {
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (password.length < 8) { toast.error("Password must be at least 8 characters"); return; }
+    if (!/[A-Z]/.test(password) || !/[0-9]/.test(password)) { toast.error("Password needs at least one capital letter and one number"); return; }
+    if (!university) { toast.error("Please choose your university or college"); return; }
     setLoading(true);
     const { data, error } = await supabase.auth.signUp({
       email, password,
-      options: { data: { full_name: fullName, university }, emailRedirectTo: `${window.location.origin}/dashboard` },
+      options: { data: { full_name: fullName, university, has_disability: hasDisability, disability_type: hasDisability ? (disabilityType || null) : null }, emailRedirectTo: `${window.location.origin}/dashboard` },
     });
     setLoading(false);
     if (error) { toast.error(error.message); return; }
@@ -108,11 +114,11 @@ function SignUpForm() {
         <div className="relative"><UserIcon className="absolute left-3 top-2.5 size-4 text-muted-foreground" />
           <Input id="su-name" required value={fullName} onChange={e => setFullName(e.target.value)} className="pl-9" placeholder="Asha Wanjiru" /></div>
       </div>
-      <div className="space-y-1.5"><Label htmlFor="su-uni">University / College</Label>
-        <div className="relative"><GraduationCap className="absolute left-3 top-2.5 size-4 text-muted-foreground" />
-          <Input id="su-uni" required value={university} onChange={e => setUniversity(e.target.value)} list="uni-list" className="pl-9" placeholder="University of Nairobi" />
-          <datalist id="uni-list">{(unis ?? []).map(u => <option key={u.name} value={u.name} />)}</datalist>
-        </div>
+      <div className="space-y-1.5"><Label htmlFor="su-uni">University / College / Tertiary institution</Label>
+        <Select value={university} onValueChange={setUniversity}>
+          <SelectTrigger id="su-uni"><SelectValue placeholder="Select your institution" /></SelectTrigger>
+          <SelectContent className="max-h-72">{(unis ?? []).map(u => <SelectItem key={u.name} value={u.name}>{u.name}</SelectItem>)}</SelectContent>
+        </Select>
       </div>
       <div className="space-y-1.5"><Label htmlFor="su-email">Email</Label>
         <div className="relative"><Mail className="absolute left-3 top-2.5 size-4 text-muted-foreground" />
@@ -120,7 +126,17 @@ function SignUpForm() {
       </div>
       <div className="space-y-1.5"><Label htmlFor="su-pwd">Password</Label>
         <div className="relative"><Lock className="absolute left-3 top-2.5 size-4 text-muted-foreground" />
-          <Input id="su-pwd" type="password" required minLength={8} value={password} onChange={e => setPassword(e.target.value)} className="pl-9" placeholder="At least 8 characters" /></div>
+          <Input id="su-pwd" type="password" required minLength={8} value={password} onChange={e => setPassword(e.target.value)} className="pl-9" placeholder="8+ chars, 1 capital, 1 number" /></div>
+      </div>
+      <div className="rounded-lg border bg-secondary/40 p-3 space-y-2">
+        <label className="flex items-center gap-2 cursor-pointer">
+          <Checkbox checked={hasDisability} onCheckedChange={(v) => setHasDisability(!!v)} id="su-dis" />
+          <span className="text-sm">I live with a disability</span>
+        </label>
+        {hasDisability && (
+          <Input value={disabilityType} onChange={e => setDisabilityType(e.target.value)} placeholder="Type of disability (optional, e.g. visual, hearing, physical)" />
+        )}
+        <p className="text-[10px] text-muted-foreground">Helps us build an inclusive platform. Private — only you and verified admins can see this.</p>
       </div>
       <Button type="submit" disabled={loading} className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-semibold">{loading ? "Creating account…" : "Create my Member ID"}</Button>
     </form>
