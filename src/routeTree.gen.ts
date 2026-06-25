@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VoteRouteImport } from './routes/vote'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ProgramsRouteImport } from './routes/programs'
 import { Route as PillarsRouteImport } from './routes/pillars'
@@ -23,6 +24,11 @@ import { Route as ArticlesSlugRouteImport } from './routes/articles.$slug'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 
+const VoteRoute = VoteRouteImport.update({
+  id: '/vote',
+  path: '/vote',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
@@ -98,6 +104,7 @@ export interface FileRoutesByFullPath {
   '/pillars': typeof PillarsRoute
   '/programs': typeof ProgramsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/vote': typeof VoteRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/articles/$slug': typeof ArticlesSlugRoute
@@ -112,6 +119,7 @@ export interface FileRoutesByTo {
   '/pillars': typeof PillarsRoute
   '/programs': typeof ProgramsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/vote': typeof VoteRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/articles/$slug': typeof ArticlesSlugRoute
@@ -128,6 +136,7 @@ export interface FileRoutesById {
   '/pillars': typeof PillarsRoute
   '/programs': typeof ProgramsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/vote': typeof VoteRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/articles/$slug': typeof ArticlesSlugRoute
@@ -144,6 +153,7 @@ export interface FileRouteTypes {
     | '/pillars'
     | '/programs'
     | '/sitemap.xml'
+    | '/vote'
     | '/admin'
     | '/dashboard'
     | '/articles/$slug'
@@ -158,6 +168,7 @@ export interface FileRouteTypes {
     | '/pillars'
     | '/programs'
     | '/sitemap.xml'
+    | '/vote'
     | '/admin'
     | '/dashboard'
     | '/articles/$slug'
@@ -173,6 +184,7 @@ export interface FileRouteTypes {
     | '/pillars'
     | '/programs'
     | '/sitemap.xml'
+    | '/vote'
     | '/_authenticated/admin'
     | '/_authenticated/dashboard'
     | '/articles/$slug'
@@ -189,10 +201,18 @@ export interface RootRouteChildren {
   PillarsRoute: typeof PillarsRoute
   ProgramsRoute: typeof ProgramsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  VoteRoute: typeof VoteRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/vote': {
+      id: '/vote'
+      path: '/vote'
+      fullPath: '/vote'
+      preLoaderRoute: typeof VoteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sitemap.xml': {
       id: '/sitemap.xml'
       path: '/sitemap.xml'
@@ -323,6 +343,7 @@ const rootRouteChildren: RootRouteChildren = {
   PillarsRoute: PillarsRoute,
   ProgramsRoute: ProgramsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  VoteRoute: VoteRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
