@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useState } from "react";
 import { toast } from "sonner";
-import { Trash2, Plus, CheckCircle, XCircle } from "lucide-react";
+import { Trash2, Plus, CheckCircle, XCircle, FileText, Handshake, Flag, Lightbulb } from "lucide-react";
 import { format } from "date-fns";
 
 export const Route = createFileRoute("/_authenticated/admin")({
@@ -38,18 +38,26 @@ function Admin() {
       <section className="py-10 flex-1">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <Tabs defaultValue="overview">
-            <TabsList className="bg-secondary">
+            <TabsList className="bg-secondary flex-wrap h-auto">
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="members">Members</TabsTrigger>
               <TabsTrigger value="programs">Programs</TabsTrigger>
               <TabsTrigger value="universities">Universities</TabsTrigger>
               <TabsTrigger value="feedback">Feedback</TabsTrigger>
+              <TabsTrigger value="articles"><FileText className="size-3.5" /> Articles</TabsTrigger>
+              <TabsTrigger value="suggestions"><Lightbulb className="size-3.5" /> Suggestions</TabsTrigger>
+              <TabsTrigger value="reports"><Flag className="size-3.5" /> Reports</TabsTrigger>
+              <TabsTrigger value="partners"><Handshake className="size-3.5" /> Partners</TabsTrigger>
             </TabsList>
             <TabsContent value="overview" className="mt-6"><Overview /></TabsContent>
             <TabsContent value="members" className="mt-6"><MembersAdmin /></TabsContent>
             <TabsContent value="programs" className="mt-6"><ProgramsAdmin /></TabsContent>
             <TabsContent value="universities" className="mt-6"><UniversitiesAdmin /></TabsContent>
             <TabsContent value="feedback" className="mt-6"><FeedbackAdmin /></TabsContent>
+            <TabsContent value="articles" className="mt-6"><ArticlesAdmin /></TabsContent>
+            <TabsContent value="suggestions" className="mt-6"><SuggestionsAdmin /></TabsContent>
+            <TabsContent value="reports" className="mt-6"><ReportsAdmin /></TabsContent>
+            <TabsContent value="partners" className="mt-6"><PartnersAdmin /></TabsContent>
           </Tabs>
         </div>
       </section>
