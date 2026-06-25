@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VoteRouteImport } from './routes/vote'
+import { Route as SuggestionsRouteImport } from './routes/suggestions'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ProgramsRouteImport } from './routes/programs'
 import { Route as PillarsRouteImport } from './routes/pillars'
@@ -28,6 +29,11 @@ import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/
 const VoteRoute = VoteRouteImport.update({
   id: '/vote',
   path: '/vote',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SuggestionsRoute = SuggestionsRouteImport.update({
+  id: '/suggestions',
+  path: '/suggestions',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -111,6 +117,7 @@ export interface FileRoutesByFullPath {
   '/pillars': typeof PillarsRoute
   '/programs': typeof ProgramsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/suggestions': typeof SuggestionsRoute
   '/vote': typeof VoteRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
@@ -127,6 +134,7 @@ export interface FileRoutesByTo {
   '/pillars': typeof PillarsRoute
   '/programs': typeof ProgramsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/suggestions': typeof SuggestionsRoute
   '/vote': typeof VoteRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
@@ -145,6 +153,7 @@ export interface FileRoutesById {
   '/pillars': typeof PillarsRoute
   '/programs': typeof ProgramsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/suggestions': typeof SuggestionsRoute
   '/vote': typeof VoteRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
@@ -163,6 +172,7 @@ export interface FileRouteTypes {
     | '/pillars'
     | '/programs'
     | '/sitemap.xml'
+    | '/suggestions'
     | '/vote'
     | '/admin'
     | '/dashboard'
@@ -179,6 +189,7 @@ export interface FileRouteTypes {
     | '/pillars'
     | '/programs'
     | '/sitemap.xml'
+    | '/suggestions'
     | '/vote'
     | '/admin'
     | '/dashboard'
@@ -196,6 +207,7 @@ export interface FileRouteTypes {
     | '/pillars'
     | '/programs'
     | '/sitemap.xml'
+    | '/suggestions'
     | '/vote'
     | '/_authenticated/admin'
     | '/_authenticated/dashboard'
@@ -214,6 +226,7 @@ export interface RootRouteChildren {
   PillarsRoute: typeof PillarsRoute
   ProgramsRoute: typeof ProgramsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  SuggestionsRoute: typeof SuggestionsRoute
   VoteRoute: typeof VoteRoute
 }
 
@@ -224,6 +237,13 @@ declare module '@tanstack/react-router' {
       path: '/vote'
       fullPath: '/vote'
       preLoaderRoute: typeof VoteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/suggestions': {
+      id: '/suggestions'
+      path: '/suggestions'
+      fullPath: '/suggestions'
+      preLoaderRoute: typeof SuggestionsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sitemap.xml': {
@@ -364,6 +384,7 @@ const rootRouteChildren: RootRouteChildren = {
   PillarsRoute: PillarsRoute,
   ProgramsRoute: ProgramsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  SuggestionsRoute: SuggestionsRoute,
   VoteRoute: VoteRoute,
 }
 export const routeTree = rootRouteImport
