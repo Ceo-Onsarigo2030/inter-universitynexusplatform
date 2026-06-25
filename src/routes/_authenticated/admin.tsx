@@ -240,3 +240,169 @@ function FeedbackAdmin() {
     </div>
   );
 }
+
+function ArticlesAdmin() {
+  const qc = useQueryClient();
+  const { data } = useQuery({ queryKey: ["admin-articles"], queryFn: async () => (await supabase.from("articles").select("*").order("updated_at", { ascending: false })).data ?? [] });
+  const [open, setOpen] = useState(false);
+  const [editing, setEditing] = useState<typeof data extends Array<infer T> | null ? T | null : never>(null as never);
+  return (
+    <div className="space-y-4">
+      <div className="flex justify-end"><Button onClick={() => { setEditing(null as never); setOpen(!open); }} className="bg-primary text-primary-foreground"><Plus className="size-4" /> {open ? "Cancel" : "New article"}</Button></div>
+      {open && <ArticleForm initial={editing} onDone={() => { setOpen(false); qc.invalidateQueries({ queryKey: ["admin-articles"] }); qc.invalidateQueries({ queryKey: ["articles-all"] }); qc.invalidateQueries({ queryKey: ["articles-preview"] }); }} />}
+      <div className="grid gap-3">
+        {data?.map(a => (
+          <div key={a.id} className="rounded-lg border bg-card p-4 flex justify-between gap-3">
+            <div className="min-w-0">
+              <p className="text-[10px] uppercase tracking-widest text-accent">{a.category} · <span className={a.status === "draft" ? "text-amber-600" : "text-emerald-600"}>{a.status}</span></p>
+              <p className="font-display text-lg text-primary">{a.title}</p>
+              {a.excerpt && <p className="text-sm text-muted-foreground line-clamp-2">{a.excerpt}</p>}
+            </div>
+            <div className="flex gap-1">
+              <Button variant="ghost" size="sm" onClick={() => { setEditing(a as never); setOpen(true); }}>Edit</Button>
+              <Button variant="ghost" size="icon" onClick={async () => {
+                if (!confirm("Delete article?")) return;
+                const { error } = await supabase.from("articles").delete().eq("id", a.id);
+                if (error) toast.error(error.message); else { toast.success("Deleted"); qc.invalidateQueries({ queryKey: ["admin-articles"] }); }
+              }}><Trash2 className="size-4 text-destructive" /></Button>
+            </div>
+          </div>
+        ))}
+        {!data?.length && <p className="text-muted-foreground text-center py-8">No articles yet.</p>}
+      </div>
+    </div>
+  );
+}
+
+function ArticleForm({ initial, onDone }: { initial: { id: string; title: string; slug: string; excerpt: string | null; body: string; category: string; status: string } | null; onDone: () => void }) {
+  const [title, setTitle] = useState(initial?.title ?? "");
+  const [slug, setSlug] = useState(initial?.slug ?? "");
+  const [excerpt, setExcerpt] = useState(initial?.excerpt ?? "");
+  const [body, setBody] = useState(initial?.body ?? "");
+  const [category, setCategory] = useState(initial?.category ?? "news");
+  const [status, setStatus] = useState(initial?.status ?? "draft");
+  const [saving, setSaving] = useState(false);
+  async function save(e: React.FormEvent) {
+    e.preventDefault();
+    const autoSlug = slug || title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    setSaving(true);
+    const payload = { title, slug: autoSlug, excerpt: excerpt || null, body, category, status, published_at: status === "published" ? new Date().toISOString() : null };
+    const res = initial ? await supabase.from("articles").update(payload).eq("id", initial.id) : await supabase.from("articles").insert(payload);
+    setSaving(false);
+    if (res.error) { toast.error(res.error.message); return; }
+    toast.success(initial ? "Article updated" : "Article saved"); onDone();
+  }
+  return (
+    <form onSubmit={save} className="rounded-xl border bg-card p-5 space-y-3">
+      <div className="grid sm:grid-cols-2 gap-3">
+        <div className="space-y-1.5"><Label>Title</Label><Input value={title} onChange={e => setTitle(e.target.value)} required /></div>
+        <div className="space-y-1.5"><Label>Slug (auto if empty)</Label><Input value={slug} onChange={e => setSlug(e.target.value)} placeholder="e.g. data-protection" /></div>
+        <div className="space-y-1.5"><Label>Category</Label>
+          <Select value={category} onValueChange={setCategory}><SelectTrigger><SelectValue /></SelectTrigger>
+            <SelectContent>{["news","announcement","policy","event-recap","feature"].map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent>
+          </Select>
+        </div>
+        <div className="space-y-1.5"><Label>Status</Label>
+          <Select value={status} onValueChange={setStatus}><SelectTrigger><SelectValue /></SelectTrigger>
+            <SelectContent>{["draft","published"].map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
+          </Select>
+        </div>
+      </div>
+      <div className="space-y-1.5"><Label>Excerpt</Label><Input value={excerpt} onChange={e => setExcerpt(e.target.value)} maxLength={300} /></div>
+      <div className="space-y-1.5"><Label>Body (markdown: ##, ###, - for bullets)</Label><Textarea rows={10} value={body} onChange={e => setBody(e.target.value)} required /></div>
+      <Button type="submit" disabled={saving} className="bg-primary text-primary-foreground">{saving ? "Saving…" : initial ? "Update article" : "Save article"}</Button>
+    </form>
+  );
+}
+
+function SuggestionsAdmin() {
+  const qc = useQueryClient();
+  const { data } = useQuery({ queryKey: ["admin-suggestions"], queryFn: async () => (await supabase.from("suggestions").select("*").order("created_at", { ascending: false })).data ?? [] });
+  return (
+    <div className="grid gap-3">
+      {data?.map(s => (
+        <div key={s.id} className={`rounded-lg border bg-card p-4 ${!s.approved ? "opacity-60" : ""}`}>
+          <div className="flex justify-between gap-3">
+            <div className="min-w-0">
+              <p className="text-[10px] uppercase tracking-widest text-accent">{s.category}</p>
+              <p className="text-sm mt-1">{s.message}</p>
+              <p className="text-xs text-muted-foreground mt-2"><span className="font-semibold text-primary">{s.name}</span>{s.university && ` · ${s.university}`} · {format(new Date(s.created_at), "PP p")}</p>
+            </div>
+            <div className="flex gap-1">
+              <Button variant="ghost" size="icon" onClick={async () => {
+                const { error } = await supabase.from("suggestions").update({ approved: !s.approved }).eq("id", s.id);
+                if (error) toast.error(error.message); else qc.invalidateQueries({ queryKey: ["admin-suggestions"] });
+              }}>{s.approved ? <XCircle className="size-4" /> : <CheckCircle className="size-4 text-primary" />}</Button>
+              <Button variant="ghost" size="icon" onClick={async () => {
+                if (!confirm("Delete suggestion?")) return;
+                const { error } = await supabase.from("suggestions").delete().eq("id", s.id);
+                if (error) toast.error(error.message); else qc.invalidateQueries({ queryKey: ["admin-suggestions"] });
+              }}><Trash2 className="size-4 text-destructive" /></Button>
+            </div>
+          </div>
+        </div>
+      ))}
+      {!data?.length && <p className="text-muted-foreground text-center py-8">No suggestions yet.</p>}
+    </div>
+  );
+}
+
+function ReportsAdmin() {
+  const qc = useQueryClient();
+  const { data } = useQuery({ queryKey: ["admin-reports"], queryFn: async () => (await supabase.from("feedback_reports").select("*, feedback(message,name)").order("created_at", { ascending: false })).data ?? [] });
+  return (
+    <div className="grid gap-3">
+      {data?.map(r => (
+        <div key={r.id} className={`rounded-lg border bg-card p-4 ${r.resolved ? "opacity-60" : ""}`}>
+          <p className="text-[10px] uppercase tracking-widest text-destructive font-semibold">Report · {r.resolved ? "Resolved" : "Open"}</p>
+          <p className="text-sm font-semibold mt-2">Reason: {r.reason}</p>
+          {(r as { feedback?: { message?: string; name?: string } }).feedback?.message && (
+            <div className="mt-2 rounded-lg bg-secondary/50 p-3 text-sm">
+              <p className="text-xs text-muted-foreground">Reported comment by {(r as { feedback?: { name?: string } }).feedback?.name}:</p>
+              <p className="italic">"{(r as { feedback?: { message?: string } }).feedback?.message}"</p>
+            </div>
+          )}
+          <p className="text-xs text-muted-foreground mt-2">{format(new Date(r.created_at), "PP p")}</p>
+          {!r.resolved && (
+            <Button size="sm" variant="outline" className="mt-3" onClick={async () => {
+              const { error } = await supabase.from("feedback_reports").update({ resolved: true }).eq("id", r.id);
+              if (error) toast.error(error.message); else qc.invalidateQueries({ queryKey: ["admin-reports"] });
+            }}>Mark resolved</Button>
+          )}
+        </div>
+      ))}
+      {!data?.length && <p className="text-muted-foreground text-center py-8">No reports yet.</p>}
+    </div>
+  );
+}
+
+function PartnersAdmin() {
+  const qc = useQueryClient();
+  const { data } = useQuery({ queryKey: ["admin-partners"], queryFn: async () => (await supabase.from("partner_inquiries").select("*").order("created_at", { ascending: false })).data ?? [] });
+  return (
+    <div className="grid gap-3">
+      {data?.map(p => (
+        <div key={p.id} className="rounded-lg border bg-card p-4 space-y-2">
+          <div className="flex justify-between gap-3 items-start">
+            <div>
+              <p className="font-display text-lg text-primary">{p.organization}</p>
+              <p className="text-xs text-muted-foreground">{p.contact_name} · <a href={`mailto:${p.email}`} className="underline">{p.email}</a> {p.phone && <>· {p.phone}</>}</p>
+              <p className="text-[10px] uppercase tracking-widest text-accent mt-1">{p.partnership_type} · {p.status}</p>
+            </div>
+            <Select value={p.status} onValueChange={async (v) => {
+              const { error } = await supabase.from("partner_inquiries").update({ status: v }).eq("id", p.id);
+              if (error) toast.error(error.message); else qc.invalidateQueries({ queryKey: ["admin-partners"] });
+            }}>
+              <SelectTrigger className="w-36"><SelectValue /></SelectTrigger>
+              <SelectContent>{["new","contacted","in-talks","accepted","declined"].map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
+            </Select>
+          </div>
+          <p className="text-sm">{p.message}</p>
+          {p.proposal_url && <a href={p.proposal_url} target="_blank" rel="noreferrer" className="text-xs text-accent underline">View proposal</a>}
+          <p className="text-xs text-muted-foreground">{format(new Date(p.created_at), "PP p")}</p>
+        </div>
+      ))}
+      {!data?.length && <p className="text-muted-foreground text-center py-8">No partner inquiries yet.</p>}
+    </div>
+  );
+}
