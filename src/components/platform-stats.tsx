@@ -1,16 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Users, GraduationCap, CalendarHeart, MessagesSquare } from "lucide-react";
+import { Users, GraduationCap, CalendarHeart, Accessibility } from "lucide-react";
 
 function useStats() {
   return useQuery({
     queryKey: ["platform-stats"],
     queryFn: async () => {
-      const [members, unis, progs, fbs] = await Promise.all([
+      const [members, unis, progs, disab] = await Promise.all([
         supabase.from("profiles").select("id", { count: "exact", head: true }),
         supabase.from("universities").select("id", { count: "exact", head: true }),
         supabase.from("programs").select("id", { count: "exact", head: true }).eq("is_published", true),
-        supabase.from("feedback").select("id", { count: "exact", head: true }).eq("approved", true),
+        supabase.from("profiles").select("id", { count: "exact", head: true }).eq("has_disability", true),
       ]);
       const memberCount = members.count ?? 0;
       // Distinct universities from member signups
@@ -20,7 +20,7 @@ function useStats() {
         members: memberCount,
         universities: Math.max(unis.count ?? 0, distinct.size),
         programs: progs.count ?? 0,
-        feedback: fbs.count ?? 0,
+        disability: disab.count ?? 0,
       };
     },
   });
@@ -31,8 +31,8 @@ export function PlatformStats() {
   const items = [
     { label: "Registered Members", value: data?.members ?? 0, icon: Users },
     { label: "Universities On Board", value: data?.universities ?? 0, icon: GraduationCap },
+    { label: "Members with Disability", value: data?.disability ?? 0, icon: Accessibility },
     { label: "Programs & Events", value: data?.programs ?? 0, icon: CalendarHeart },
-    { label: "Community Voices", value: data?.feedback ?? 0, icon: MessagesSquare },
   ];
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">

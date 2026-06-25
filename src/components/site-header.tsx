@@ -11,9 +11,14 @@ import { useQueryClient } from "@tanstack/react-query";
 const NAV = [
   { to: "/", label: "Home" },
   { to: "/about", label: "About" },
-  { to: "/programs", label: "Programs" },
+  { to: "/pillars", label: "Pillars" },
+  { to: "/programs", label: "Events" },
+  { to: "/articles", label: "Articles" },
   { to: "/members", label: "Members" },
   { to: "/feedback", label: "Feedback" },
+  { to: "/suggestions", label: "Suggestions" },
+  { to: "/vote", label: "Vote" },
+  { to: "/partner", label: "Partner" },
 ];
 
 export function SiteHeader() {

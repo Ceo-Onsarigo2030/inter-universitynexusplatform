@@ -14,6 +14,83 @@ export type Database = {
   }
   public: {
     Tables: {
+      articles: {
+        Row: {
+          author_id: string | null
+          body: string
+          category: string
+          cover_url: string | null
+          created_at: string
+          excerpt: string | null
+          id: string
+          published_at: string | null
+          slug: string
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author_id?: string | null
+          body: string
+          category?: string
+          cover_url?: string | null
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          published_at?: string | null
+          slug: string
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author_id?: string | null
+          body?: string
+          category?: string
+          cover_url?: string | null
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          published_at?: string | null
+          slug?: string
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      event_rsvps: {
+        Row: {
+          created_at: string
+          id: string
+          program_id: string
+          ticket_tier: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          program_id: string
+          ticket_tier?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          program_id?: string
+          ticket_tier?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_rsvps_program_id_fkey"
+            columns: ["program_id"]
+            isOneToOne: false
+            referencedRelation: "programs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       feedback: {
         Row: {
           approved: boolean
@@ -44,16 +121,94 @@ export type Database = {
         }
         Relationships: []
       }
+      feedback_reports: {
+        Row: {
+          created_at: string
+          feedback_id: string | null
+          id: string
+          reason: string
+          reporter_id: string | null
+          resolved: boolean
+        }
+        Insert: {
+          created_at?: string
+          feedback_id?: string | null
+          id?: string
+          reason: string
+          reporter_id?: string | null
+          resolved?: boolean
+        }
+        Update: {
+          created_at?: string
+          feedback_id?: string | null
+          id?: string
+          reason?: string
+          reporter_id?: string | null
+          resolved?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feedback_reports_feedback_id_fkey"
+            columns: ["feedback_id"]
+            isOneToOne: false
+            referencedRelation: "feedback"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      partner_inquiries: {
+        Row: {
+          contact_name: string
+          created_at: string
+          email: string
+          id: string
+          message: string
+          organization: string
+          partnership_type: string | null
+          phone: string | null
+          proposal_url: string | null
+          status: string
+        }
+        Insert: {
+          contact_name: string
+          created_at?: string
+          email: string
+          id?: string
+          message: string
+          organization: string
+          partnership_type?: string | null
+          phone?: string | null
+          proposal_url?: string | null
+          status?: string
+        }
+        Update: {
+          contact_name?: string
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string
+          organization?: string
+          partnership_type?: string | null
+          phone?: string | null
+          proposal_url?: string | null
+          status?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
           bio: string | null
           course: string | null
           created_at: string
+          disability_type: string | null
           full_name: string
+          gender: string | null
+          has_disability: boolean
           id: string
           member_id: string
           member_number: number
+          phone: string | null
           university: string
           updated_at: string
         }
@@ -62,10 +217,14 @@ export type Database = {
           bio?: string | null
           course?: string | null
           created_at?: string
+          disability_type?: string | null
           full_name: string
+          gender?: string | null
+          has_disability?: boolean
           id: string
           member_id: string
           member_number: number
+          phone?: string | null
           university: string
           updated_at?: string
         }
@@ -74,10 +233,14 @@ export type Database = {
           bio?: string | null
           course?: string | null
           created_at?: string
+          disability_type?: string | null
           full_name?: string
+          gender?: string | null
+          has_disability?: boolean
           id?: string
           member_id?: string
           member_number?: number
+          phone?: string | null
           university?: string
           updated_at?: string
         }
@@ -94,6 +257,12 @@ export type Database = {
           id: string
           is_published: boolean
           location: string | null
+          overview: string | null
+          pillar: string | null
+          ticket_regular: number | null
+          ticket_url: string | null
+          ticket_vip: number | null
+          ticket_vvip: number | null
           title: string
         }
         Insert: {
@@ -106,6 +275,12 @@ export type Database = {
           id?: string
           is_published?: boolean
           location?: string | null
+          overview?: string | null
+          pillar?: string | null
+          ticket_regular?: number | null
+          ticket_url?: string | null
+          ticket_vip?: number | null
+          ticket_vvip?: number | null
           title: string
         }
         Update: {
@@ -118,7 +293,49 @@ export type Database = {
           id?: string
           is_published?: boolean
           location?: string | null
+          overview?: string | null
+          pillar?: string | null
+          ticket_regular?: number | null
+          ticket_url?: string | null
+          ticket_vip?: number | null
+          ticket_vvip?: number | null
           title?: string
+        }
+        Relationships: []
+      }
+      suggestions: {
+        Row: {
+          approved: boolean
+          category: string
+          created_at: string
+          id: string
+          message: string
+          name: string
+          university: string | null
+          upvotes: number
+          user_id: string | null
+        }
+        Insert: {
+          approved?: boolean
+          category?: string
+          created_at?: string
+          id?: string
+          message: string
+          name: string
+          university?: string | null
+          upvotes?: number
+          user_id?: string | null
+        }
+        Update: {
+          approved?: boolean
+          category?: string
+          created_at?: string
+          id?: string
+          message?: string
+          name?: string
+          university?: string | null
+          upvotes?: number
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -140,6 +357,27 @@ export type Database = {
           id?: string
           location?: string | null
           name?: string
+        }
+        Relationships: []
+      }
+      university_votes: {
+        Row: {
+          created_at: string
+          id: string
+          university_name: string
+          voter_fingerprint: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          university_name: string
+          voter_fingerprint?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          university_name?: string
+          voter_fingerprint?: string | null
         }
         Relationships: []
       }
