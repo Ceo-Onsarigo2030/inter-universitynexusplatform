@@ -34,19 +34,19 @@ export function SuggestionForm() {
 
   return (
     <form onSubmit={(e) => { e.preventDefault(); if (message.trim().length < 3) return; submit.mutate(); }}
-      className="rounded-xl border bg-card p-6 shadow-elegant space-y-4">
+      className="rounded-xl border border-gold/30 bg-ink p-6 shadow-gold space-y-4 text-cream">
       <div className="grid sm:grid-cols-2 gap-4">
-        <div className="space-y-1.5"><Label>Your name</Label><Input value={name} onChange={e => setName(e.target.value)} required maxLength={100} /></div>
-        <div className="space-y-1.5"><Label>University (optional)</Label><Input value={university} onChange={e => setUniversity(e.target.value)} maxLength={120} /></div>
-        <div className="space-y-1.5 sm:col-span-2"><Label>Category</Label>
+        <div className="space-y-1.5"><Label className="text-gold">Your name</Label><Input className="bg-ink border-gold/30 text-cream placeholder:text-cream/40" value={name} onChange={e => setName(e.target.value)} required maxLength={100} /></div>
+        <div className="space-y-1.5"><Label className="text-gold">University (optional)</Label><Input className="bg-ink border-gold/30 text-cream placeholder:text-cream/40" value={university} onChange={e => setUniversity(e.target.value)} maxLength={120} /></div>
+        <div className="space-y-1.5 sm:col-span-2"><Label className="text-gold">Category</Label>
           <Select value={category} onValueChange={setCategory}>
-            <SelectTrigger><SelectValue /></SelectTrigger>
+            <SelectTrigger className="bg-ink border-gold/30 text-cream"><SelectValue /></SelectTrigger>
             <SelectContent>{CATEGORIES.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent>
           </Select>
         </div>
       </div>
-      <div className="space-y-1.5"><Label>What should we do next?</Label><Textarea rows={4} value={message} onChange={e => setMessage(e.target.value)} required maxLength={2000} placeholder="Suggest an event, program or improvement…" /></div>
-      <Button type="submit" disabled={submit.isPending} className="bg-primary text-primary-foreground">{submit.isPending ? "Posting…" : "Post suggestion"}</Button>
+      <div className="space-y-1.5"><Label className="text-gold">What should we do next?</Label><Textarea className="bg-ink border-gold/30 text-cream placeholder:text-cream/40" rows={4} value={message} onChange={e => setMessage(e.target.value)} required maxLength={2000} placeholder="Suggest an event, program or improvement…" /></div>
+      <Button type="submit" disabled={submit.isPending} className="bg-gold text-ink hover:bg-gold/90 font-semibold">{submit.isPending ? "Posting…" : "Post suggestion"}</Button>
     </form>
   );
 }
@@ -62,21 +62,21 @@ export function SuggestionWall({ limit }: { limit?: number }) {
       return data;
     },
   });
-  if (isLoading) return <p className="text-muted-foreground text-sm">Loading suggestions…</p>;
-  if (!data?.length) return <p className="text-muted-foreground text-sm">Be the first to suggest something.</p>;
+  if (isLoading) return <p className="text-cream/60 text-sm">Loading suggestions…</p>;
+  if (!data?.length) return <p className="text-cream/60 text-sm">Be the first to suggest something.</p>;
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {data.map(s => (
-        <article key={s.id} className="rounded-xl border bg-card p-5 shadow-elegant relative">
-          <Lightbulb className="absolute -top-2 -right-2 size-12 text-gold/10" />
-          <p className="text-[10px] uppercase tracking-widest text-accent font-semibold">{s.category}</p>
-          <p className="mt-2 text-sm leading-relaxed text-foreground">{s.message}</p>
-          <div className="mt-4 pt-3 border-t flex items-center justify-between">
+        <article key={s.id} className="rounded-xl border border-gold/30 bg-ink p-5 shadow-gold relative">
+          <Lightbulb className="absolute -top-2 -right-2 size-12 text-gold/20" />
+          <p className="text-[10px] uppercase tracking-widest text-gold font-semibold">{s.category}</p>
+          <p className="mt-2 text-sm leading-relaxed text-cream">{s.message}</p>
+          <div className="mt-4 pt-3 border-t border-gold/20 flex items-center justify-between">
             <div>
-              <p className="text-sm font-semibold text-primary">{s.name}</p>
-              {s.university && <p className="text-xs text-muted-foreground">{s.university}</p>}
+              <p className="text-sm font-semibold text-gold">{s.name}</p>
+              {s.university && <p className="text-xs text-cream/60">{s.university}</p>}
             </div>
-            <p className="text-[10px] uppercase tracking-wider text-muted-foreground">{formatDistanceToNow(new Date(s.created_at), { addSuffix: true })}</p>
+            <p className="text-[10px] uppercase tracking-wider text-cream/50">{formatDistanceToNow(new Date(s.created_at), { addSuffix: true })}</p>
           </div>
         </article>
       ))}
