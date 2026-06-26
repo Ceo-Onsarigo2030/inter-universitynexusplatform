@@ -27,7 +27,7 @@ function SuggestionsPage() {
       <section className="py-10">
         <div className="mx-auto max-w-3xl px-4 sm:px-6"><SuggestionForm /></div>
       </section>
-      <section className="pb-20">
+      <section className="pb-20 surface-ink">
         <div className="mx-auto max-w-7xl px-4 sm:px-6"><SuggestionWall /></div>
       </section>
       <SiteFooter />
