@@ -40,7 +40,7 @@ function FeedbackPage() {
           <FeedbackForm defaultName={profile?.full_name ?? ""} defaultUniversity={profile?.university ?? ""} userId={user?.id ?? null} />
         </div>
       </section>
-      <section className="pb-20">
+      <section className="pb-20 surface-ink">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <FeedbackWall />
         </div>
