@@ -20,22 +20,22 @@ export function FeedbackWall({ limit }: { limit?: number }) {
     },
   });
 
-  if (isLoading) return <p className="text-muted-foreground text-sm">Loading feedback…</p>;
-  if (!data?.length) return <p className="text-muted-foreground text-sm">Be the first to leave a comment.</p>;
+  if (isLoading) return <p className="text-cream/60 text-sm">Loading feedback…</p>;
+  if (!data?.length) return <p className="text-cream/60 text-sm">Be the first to leave a comment.</p>;
 
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {data.map(f => (
-        <article key={f.id} className="rounded-xl border bg-card p-5 shadow-elegant relative overflow-hidden">
-          <Quote className="absolute -top-2 -right-2 size-16 text-gold/10" />
-          <p className="text-sm leading-relaxed text-foreground">{f.message}</p>
-          <div className="mt-4 pt-4 border-t flex items-center justify-between">
+        <article key={f.id} className="rounded-xl border border-gold/30 bg-ink p-5 shadow-gold relative overflow-hidden">
+          <Quote className="absolute -top-2 -right-2 size-16 text-gold/20" />
+          <p className="text-sm leading-relaxed text-cream">{f.message}</p>
+          <div className="mt-4 pt-4 border-t border-gold/20 flex items-center justify-between">
             <div>
-              <p className="text-sm font-semibold text-primary">{f.name}</p>
-              {f.university && <p className="text-xs text-muted-foreground">{f.university}</p>}
+              <p className="text-sm font-semibold text-gold">{f.name}</p>
+              {f.university && <p className="text-xs text-cream/60">{f.university}</p>}
             </div>
             <div className="flex items-center gap-2">
-              <p className="text-[10px] uppercase tracking-wider text-muted-foreground">{formatDistanceToNow(new Date(f.created_at), { addSuffix: true })}</p>
+              <p className="text-[10px] uppercase tracking-wider text-cream/50">{formatDistanceToNow(new Date(f.created_at), { addSuffix: true })}</p>
               <ReportButton feedbackId={f.id} />
             </div>
           </div>
