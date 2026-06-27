@@ -448,7 +448,13 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      university_vote_counts: {
+        Row: {
+          university_name: string | null
+          votes: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       has_role: {
