@@ -15,7 +15,6 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ProgramsRouteImport } from './routes/programs'
 import { Route as PillarsRouteImport } from './routes/pillars'
 import { Route as PartnerRouteImport } from './routes/partner'
-import { Route as MembersRouteImport } from './routes/members'
 import { Route as FeedbackRouteImport } from './routes/feedback'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ArticlesRouteImport } from './routes/articles'
@@ -54,11 +53,6 @@ const PillarsRoute = PillarsRouteImport.update({
 const PartnerRoute = PartnerRouteImport.update({
   id: '/partner',
   path: '/partner',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MembersRoute = MembersRouteImport.update({
-  id: '/members',
-  path: '/members',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FeedbackRoute = FeedbackRouteImport.update({
@@ -112,7 +106,6 @@ export interface FileRoutesByFullPath {
   '/articles': typeof ArticlesRouteWithChildren
   '/auth': typeof AuthRoute
   '/feedback': typeof FeedbackRoute
-  '/members': typeof MembersRoute
   '/partner': typeof PartnerRoute
   '/pillars': typeof PillarsRoute
   '/programs': typeof ProgramsRoute
@@ -129,7 +122,6 @@ export interface FileRoutesByTo {
   '/articles': typeof ArticlesRouteWithChildren
   '/auth': typeof AuthRoute
   '/feedback': typeof FeedbackRoute
-  '/members': typeof MembersRoute
   '/partner': typeof PartnerRoute
   '/pillars': typeof PillarsRoute
   '/programs': typeof ProgramsRoute
@@ -148,7 +140,6 @@ export interface FileRoutesById {
   '/articles': typeof ArticlesRouteWithChildren
   '/auth': typeof AuthRoute
   '/feedback': typeof FeedbackRoute
-  '/members': typeof MembersRoute
   '/partner': typeof PartnerRoute
   '/pillars': typeof PillarsRoute
   '/programs': typeof ProgramsRoute
@@ -167,7 +158,6 @@ export interface FileRouteTypes {
     | '/articles'
     | '/auth'
     | '/feedback'
-    | '/members'
     | '/partner'
     | '/pillars'
     | '/programs'
@@ -184,7 +174,6 @@ export interface FileRouteTypes {
     | '/articles'
     | '/auth'
     | '/feedback'
-    | '/members'
     | '/partner'
     | '/pillars'
     | '/programs'
@@ -202,7 +191,6 @@ export interface FileRouteTypes {
     | '/articles'
     | '/auth'
     | '/feedback'
-    | '/members'
     | '/partner'
     | '/pillars'
     | '/programs'
@@ -221,7 +209,6 @@ export interface RootRouteChildren {
   ArticlesRoute: typeof ArticlesRouteWithChildren
   AuthRoute: typeof AuthRoute
   FeedbackRoute: typeof FeedbackRoute
-  MembersRoute: typeof MembersRoute
   PartnerRoute: typeof PartnerRoute
   PillarsRoute: typeof PillarsRoute
   ProgramsRoute: typeof ProgramsRoute
@@ -272,13 +259,6 @@ declare module '@tanstack/react-router' {
       path: '/partner'
       fullPath: '/partner'
       preLoaderRoute: typeof PartnerRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/members': {
-      id: '/members'
-      path: '/members'
-      fullPath: '/members'
-      preLoaderRoute: typeof MembersRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/feedback': {
@@ -379,7 +359,6 @@ const rootRouteChildren: RootRouteChildren = {
   ArticlesRoute: ArticlesRouteWithChildren,
   AuthRoute: AuthRoute,
   FeedbackRoute: FeedbackRoute,
-  MembersRoute: MembersRoute,
   PartnerRoute: PartnerRoute,
   PillarsRoute: PillarsRoute,
   ProgramsRoute: ProgramsRoute,

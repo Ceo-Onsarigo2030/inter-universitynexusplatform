@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Instagram, Facebook, Mail } from "lucide-react";
+import { Instagram, Facebook, Mail, Twitter, Linkedin, MessageCircle } from "lucide-react";
 import nexusLogo from "@/assets/nexus-logo.jpg.asset.json";
 import baLogo from "@/assets/ba-connect-logo.jpg.asset.json";
 
@@ -15,9 +15,12 @@ export function SiteFooter() {
           <p className="text-cream/70 max-w-md text-sm leading-relaxed">
             The Inter–Universities Nexus Platform is a flagship initiative of B.A Connect Organization, uniting students across Kenya & Africa for talent, leadership, innovation and opportunity.
           </p>
-          <div className="flex items-center gap-3">
-            <a href="https://instagram.com/uninexus_connect" target="_blank" rel="noreferrer" className="size-10 rounded-full border border-gold/40 grid place-items-center text-gold hover:bg-gold hover:text-ink transition" aria-label="Instagram"><Instagram className="size-4" /></a>
-            <a href="https://facebook.com/UniNexus Connect" target="_blank" rel="noreferrer" className="size-10 rounded-full border border-gold/40 grid place-items-center text-gold hover:bg-gold hover:text-ink transition" aria-label="Facebook"><Facebook className="size-4" /></a>
+          <div className="flex items-center gap-3 flex-wrap">
+            <a href="https://www.facebook.com/uninexusconnect" target="_blank" rel="noopener noreferrer" className="size-10 rounded-full border border-gold/40 grid place-items-center text-gold hover:bg-gold hover:text-ink transition" aria-label="Facebook"><Facebook className="size-4" /></a>
+            <a href="https://www.twitter.com/uninexusconnect" target="_blank" rel="noopener noreferrer" className="size-10 rounded-full border border-gold/40 grid place-items-center text-gold hover:bg-gold hover:text-ink transition" aria-label="Twitter / X"><Twitter className="size-4" /></a>
+            <a href="https://www.instagram.com/uninexusconnect" target="_blank" rel="noopener noreferrer" className="size-10 rounded-full border border-gold/40 grid place-items-center text-gold hover:bg-gold hover:text-ink transition" aria-label="Instagram"><Instagram className="size-4" /></a>
+            <a href="https://www.linkedin.com/company/uninexusconnect" target="_blank" rel="noopener noreferrer" className="size-10 rounded-full border border-gold/40 grid place-items-center text-gold hover:bg-gold hover:text-ink transition" aria-label="LinkedIn"><Linkedin className="size-4" /></a>
+            <a href="https://wa.me/254700000000" target="_blank" rel="noopener noreferrer" className="size-10 rounded-full border border-gold/40 grid place-items-center text-gold hover:bg-gold hover:text-ink transition" aria-label="WhatsApp"><MessageCircle className="size-4" /></a>
             <a href="mailto:uninexusplatformke@gmail.com" className="size-10 rounded-full border border-gold/40 grid place-items-center text-gold hover:bg-gold hover:text-ink transition" aria-label="Email"><Mail className="size-4" /></a>
           </div>
         </div>
@@ -26,7 +29,6 @@ export function SiteFooter() {
           <ul className="space-y-2 text-sm text-cream/75">
             <li><Link to="/about" className="hover:text-gold">About</Link></li>
             <li><Link to="/programs" className="hover:text-gold">Programs & Events</Link></li>
-            <li><Link to="/members" className="hover:text-gold">Members</Link></li>
             <li><Link to="/feedback" className="hover:text-gold">Feedback Wall</Link></li>
             <li><Link to="/auth" className="hover:text-gold">Join the Platform</Link></li>
           </ul>
