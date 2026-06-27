@@ -15,13 +15,13 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ProgramsRouteImport } from './routes/programs'
 import { Route as PillarsRouteImport } from './routes/pillars'
 import { Route as PartnerRouteImport } from './routes/partner'
-import { Route as MembersRouteImport } from './routes/members'
 import { Route as FeedbackRouteImport } from './routes/feedback'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ArticlesRouteImport } from './routes/articles'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as GalaPassPassIdRouteImport } from './routes/gala-pass.$passId'
 import { Route as ArticlesSlugRouteImport } from './routes/articles.$slug'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
@@ -56,11 +56,6 @@ const PartnerRoute = PartnerRouteImport.update({
   path: '/partner',
   getParentRoute: () => rootRouteImport,
 } as any)
-const MembersRoute = MembersRouteImport.update({
-  id: '/members',
-  path: '/members',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const FeedbackRoute = FeedbackRouteImport.update({
   id: '/feedback',
   path: '/feedback',
@@ -90,6 +85,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GalaPassPassIdRoute = GalaPassPassIdRouteImport.update({
+  id: '/gala-pass/$passId',
+  path: '/gala-pass/$passId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ArticlesSlugRoute = ArticlesSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -112,7 +112,6 @@ export interface FileRoutesByFullPath {
   '/articles': typeof ArticlesRouteWithChildren
   '/auth': typeof AuthRoute
   '/feedback': typeof FeedbackRoute
-  '/members': typeof MembersRoute
   '/partner': typeof PartnerRoute
   '/pillars': typeof PillarsRoute
   '/programs': typeof ProgramsRoute
@@ -122,6 +121,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AuthenticatedAdminRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/articles/$slug': typeof ArticlesSlugRoute
+  '/gala-pass/$passId': typeof GalaPassPassIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -129,7 +129,6 @@ export interface FileRoutesByTo {
   '/articles': typeof ArticlesRouteWithChildren
   '/auth': typeof AuthRoute
   '/feedback': typeof FeedbackRoute
-  '/members': typeof MembersRoute
   '/partner': typeof PartnerRoute
   '/pillars': typeof PillarsRoute
   '/programs': typeof ProgramsRoute
@@ -139,6 +138,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AuthenticatedAdminRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/articles/$slug': typeof ArticlesSlugRoute
+  '/gala-pass/$passId': typeof GalaPassPassIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -148,7 +148,6 @@ export interface FileRoutesById {
   '/articles': typeof ArticlesRouteWithChildren
   '/auth': typeof AuthRoute
   '/feedback': typeof FeedbackRoute
-  '/members': typeof MembersRoute
   '/partner': typeof PartnerRoute
   '/pillars': typeof PillarsRoute
   '/programs': typeof ProgramsRoute
@@ -158,6 +157,7 @@ export interface FileRoutesById {
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/articles/$slug': typeof ArticlesSlugRoute
+  '/gala-pass/$passId': typeof GalaPassPassIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -167,7 +167,6 @@ export interface FileRouteTypes {
     | '/articles'
     | '/auth'
     | '/feedback'
-    | '/members'
     | '/partner'
     | '/pillars'
     | '/programs'
@@ -177,6 +176,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/dashboard'
     | '/articles/$slug'
+    | '/gala-pass/$passId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -184,7 +184,6 @@ export interface FileRouteTypes {
     | '/articles'
     | '/auth'
     | '/feedback'
-    | '/members'
     | '/partner'
     | '/pillars'
     | '/programs'
@@ -194,6 +193,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/dashboard'
     | '/articles/$slug'
+    | '/gala-pass/$passId'
   id:
     | '__root__'
     | '/'
@@ -202,7 +202,6 @@ export interface FileRouteTypes {
     | '/articles'
     | '/auth'
     | '/feedback'
-    | '/members'
     | '/partner'
     | '/pillars'
     | '/programs'
@@ -212,6 +211,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin'
     | '/_authenticated/dashboard'
     | '/articles/$slug'
+    | '/gala-pass/$passId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -221,13 +221,13 @@ export interface RootRouteChildren {
   ArticlesRoute: typeof ArticlesRouteWithChildren
   AuthRoute: typeof AuthRoute
   FeedbackRoute: typeof FeedbackRoute
-  MembersRoute: typeof MembersRoute
   PartnerRoute: typeof PartnerRoute
   PillarsRoute: typeof PillarsRoute
   ProgramsRoute: typeof ProgramsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SuggestionsRoute: typeof SuggestionsRoute
   VoteRoute: typeof VoteRoute
+  GalaPassPassIdRoute: typeof GalaPassPassIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -274,13 +274,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PartnerRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/members': {
-      id: '/members'
-      path: '/members'
-      fullPath: '/members'
-      preLoaderRoute: typeof MembersRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/feedback': {
       id: '/feedback'
       path: '/feedback'
@@ -321,6 +314,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gala-pass/$passId': {
+      id: '/gala-pass/$passId'
+      path: '/gala-pass/$passId'
+      fullPath: '/gala-pass/$passId'
+      preLoaderRoute: typeof GalaPassPassIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/articles/$slug': {
@@ -379,13 +379,13 @@ const rootRouteChildren: RootRouteChildren = {
   ArticlesRoute: ArticlesRouteWithChildren,
   AuthRoute: AuthRoute,
   FeedbackRoute: FeedbackRoute,
-  MembersRoute: MembersRoute,
   PartnerRoute: PartnerRoute,
   PillarsRoute: PillarsRoute,
   ProgramsRoute: ProgramsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SuggestionsRoute: SuggestionsRoute,
   VoteRoute: VoteRoute,
+  GalaPassPassIdRoute: GalaPassPassIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

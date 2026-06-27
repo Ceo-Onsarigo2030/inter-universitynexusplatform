@@ -25,9 +25,9 @@ export function UniversityVote() {
   const { data: votes } = useQuery({
     queryKey: ["uni-votes"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("university_votes").select("university_name");
+      const { data, error } = await supabase.from("university_vote_counts" as never).select("university_name, votes");
       if (error) throw error;
-      return data ?? [];
+      return (data ?? []) as { university_name: string; votes: number }[];
     },
   });
 
@@ -35,12 +35,12 @@ export function UniversityVote() {
     const counts = new Map<string, number>();
     (votes ?? []).forEach(v => {
       const k = normalize(v.university_name);
-      counts.set(k, (counts.get(k) ?? 0) + 1);
+      counts.set(k, (counts.get(k) ?? 0) + (v.votes ?? 1));
     });
     return Array.from(counts.entries()).map(([n, c]) => ({ name: n, count: c })).sort((a, b) => b.count - a.count).slice(0, 10);
   }, [votes]);
 
-  const total = votes?.length ?? 0;
+  const total = (votes ?? []).reduce((s, v) => s + (v.votes ?? 0), 0);
 
   const vote = useMutation({
     mutationFn: async (uname: string) => {

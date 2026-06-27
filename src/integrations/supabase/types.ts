@@ -156,6 +156,50 @@ export type Database = {
           },
         ]
       }
+      gala_registrations: {
+        Row: {
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          institution: string | null
+          pass_id: string
+          phone: string | null
+          program_id: string | null
+          ticket_tier: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          full_name: string
+          id?: string
+          institution?: string | null
+          pass_id: string
+          phone?: string | null
+          program_id?: string | null
+          ticket_tier?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          institution?: string | null
+          pass_id?: string
+          phone?: string | null
+          program_id?: string | null
+          ticket_tier?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gala_registrations_program_id_fkey"
+            columns: ["program_id"]
+            isOneToOne: false
+            referencedRelation: "programs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       partner_inquiries: {
         Row: {
           contact_name: string
@@ -404,7 +448,13 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      university_vote_counts: {
+        Row: {
+          university_name: string | null
+          votes: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       has_role: {
