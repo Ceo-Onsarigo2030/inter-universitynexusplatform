@@ -249,7 +249,6 @@ function Index() {
           <p className="mt-4 text-muted-foreground max-w-xl mx-auto">Join thousands of students building Kenya's most ambitious youth platform. Get your official Member ID instantly.</p>
           <div className="mt-8 flex justify-center gap-3 flex-wrap">
             <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90"><Link to="/auth">Create your Member ID</Link></Button>
-            <Button asChild size="lg" variant="outline"><Link to="/members">See members</Link></Button>
           </div>
         </div>
       </section>
