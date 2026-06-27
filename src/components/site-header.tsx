@@ -14,7 +14,6 @@ const NAV = [
   { to: "/pillars", label: "Pillars" },
   { to: "/programs", label: "Events" },
   { to: "/articles", label: "Articles" },
-  { to: "/members", label: "Members" },
   { to: "/feedback", label: "Feedback" },
   { to: "/suggestions", label: "Suggestions" },
   { to: "/vote", label: "Vote" },
