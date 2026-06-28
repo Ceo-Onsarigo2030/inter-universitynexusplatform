@@ -1,15 +1,22 @@
-// Stats are intentionally kept at zero until the auth system is
-// fully verified and fresh member registrations begin.
-// To activate live counts later, swap the hardcoded zeros for DB queries.
-
 import { Users, GraduationCap, CalendarHeart, Accessibility } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 export function PlatformStats() {
+  const { data: stats } = useQuery({
+    queryKey: ["platform-stats"],
+    queryFn: async () => {
+      const { data, error } = await supabase.rpc("platform_stats");
+      if (error) throw error;
+      return data?.[0] ?? null;
+    },
+  });
+
   const items = [
-    { label: "Registered Members", value: 0, icon: Users },
-    { label: "Universities On Board", value: 0, icon: GraduationCap },
-    { label: "Members with Disability", value: 0, icon: Accessibility },
-    { label: "Programs & Events", value: 0, icon: CalendarHeart },
+    { label: "Registered Members", value: stats?.registered_members ?? 0, icon: Users },
+    { label: "Universities On Board", value: stats?.universities_on_board ?? 0, icon: GraduationCap },
+    { label: "Members with Disability", value: stats?.members_with_disability ?? 0, icon: Accessibility },
+    { label: "Programs & Events", value: stats?.published_programs ?? 0, icon: CalendarHeart },
   ];
 
   return (

@@ -475,6 +475,19 @@ export type Database = {
         }
         Returns: boolean
       }
+      next_member_number_for_backfill: { Args: never; Returns: number }
+      platform_stats: {
+        Args: never
+        Returns: {
+          approved_feedback: number
+          approved_suggestions: number
+          members_with_disability: number
+          published_articles: number
+          published_programs: number
+          registered_members: number
+          universities_on_board: number
+        }[]
+      }
     }
     Enums: {
       app_role: "admin" | "member"
