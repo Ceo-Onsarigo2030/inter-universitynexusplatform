@@ -457,6 +457,17 @@ export type Database = {
       }
     }
     Functions: {
+      get_gala_pass: {
+        Args: { p_pass_id: string }
+        Returns: {
+          created_at: string
+          email: string
+          full_name: string
+          institution: string
+          pass_id: string
+          ticket_tier: string
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

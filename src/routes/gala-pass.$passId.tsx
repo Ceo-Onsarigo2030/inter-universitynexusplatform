@@ -21,14 +21,11 @@ function GalaPass() {
   const { data, isLoading, error } = useQuery({
     queryKey: ["gala-pass", passId],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("gala_registrations")
-        .select("pass_id, full_name, email, institution, ticket_tier, created_at")
-        .eq("pass_id", passId)
-        .maybeSingle();
+      const { data, error } = await supabase.rpc("get_gala_pass", { p_pass_id: passId });
       if (error) throw error;
-      if (!data) throw notFound();
-      return data;
+      const row = Array.isArray(data) ? data[0] : data;
+      if (!row) throw notFound();
+      return row as { pass_id: string; full_name: string; email: string; institution: string | null; ticket_tier: string | null; created_at: string };
     },
   });
 
