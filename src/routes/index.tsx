@@ -51,14 +51,13 @@ function Index() {
     <div className="min-h-screen flex flex-col bg-background">
       <SiteHeader />
 
-      {/* HERO with student photo and dual logos */}
+      {/* HERO */}
       <section className="relative surface-ink overflow-hidden">
         <div className="absolute inset-0 opacity-20">
-          <img src={heroImage.url} alt="Students connecting at a Nexus event, including students with disabilities" className="w-full h-full object-cover" />
+          <img src={heroImage.url} alt="Students connecting at a Nexus event" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/85 to-ink/30" />
         </div>
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 pt-10 pb-20 lg:pt-16 lg:pb-28">
-          {/* Dual logo lockup */}
           <div className="flex items-center gap-4 mb-8">
             <img src={nexusLogo.url} alt="Inter-Universities Nexus" className="h-20 w-20 sm:h-24 sm:w-24 object-contain bg-ink rounded-lg p-1" />
             <div className="h-16 w-px bg-gold/40" />
@@ -70,7 +69,9 @@ function Index() {
           </div>
 
           <div className="max-w-3xl">
-            <span className="inline-flex items-center gap-2 rounded-full border border-gold/30 px-3 py-1 text-[11px] uppercase tracking-[0.2em] text-gold/90"><Sparkles className="size-3" /> Universities · Colleges · Tertiary Institutions</span>
+            <span className="inline-flex items-center gap-2 rounded-full border border-gold/30 px-3 py-1 text-[11px] uppercase tracking-[0.2em] text-gold/90">
+              <Sparkles className="size-3" /> Universities · Colleges · Tertiary Institutions
+            </span>
             <h1 className="mt-6 heading-display text-5xl sm:text-6xl lg:text-7xl text-cream">
               One nation. <span className="gold-gradient-text">Every campus.</span><br />Endless potential.
             </h1>
@@ -78,9 +79,17 @@ function Index() {
               A vibrant national space for talent, creativity, innovation, inclusion and opportunity — built for students from every corner of Kenya and beyond.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Button asChild size="lg" className="bg-gold text-ink hover:bg-gold/90 font-semibold"><Link to="/auth">Join the Nexus <ArrowRight className="size-4" /></Link></Button>
-              <Button asChild size="lg" variant="outline" className="border-gold/40 text-cream hover:bg-gold hover:text-ink"><a href="https://baconnect.org" target="_blank" rel="noreferrer">Read more about B.A Connect Org. <ExternalLink className="size-4" /></a></Button>
-              <Button asChild size="lg" variant="ghost" className="text-cream hover:bg-white/10"><a href="#upcoming">Upcoming events ↓</a></Button>
+              {/* CTA 1 */}
+              <Button asChild size="lg" className="bg-gold text-ink hover:bg-gold/90 font-semibold">
+                <Link to="/auth">Join the Nexus <ArrowRight className="size-4" /></Link>
+              </Button>
+              {/* CTA 2 — was blank, now fixed */}
+              <Button asChild size="lg" variant="outline" className="border-gold/40 text-cream hover:bg-gold hover:text-ink font-semibold">
+                <Link to="/programs">Explore Events <Calendar className="size-4" /></Link>
+              </Button>
+              <Button asChild size="lg" variant="ghost" className="text-cream hover:bg-white/10">
+                <a href="#upcoming">Upcoming events ↓</a>
+              </Button>
             </div>
           </div>
         </div>
@@ -93,7 +102,7 @@ function Index() {
         </div>
       </section>
 
-      {/* UPCOMING EVENTS STRIP */}
+      {/* UPCOMING EVENTS */}
       <section id="upcoming" className="py-20 sm:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="flex items-end justify-between flex-wrap gap-4 mb-8">
@@ -114,20 +123,20 @@ function Index() {
                     <p className="text-sm text-foreground/80">{ev.overview ?? ev.description}</p>
                   </ReadMore>
                   <div className="space-y-1 text-xs text-muted-foreground border-t pt-3">
-                    {ev.event_date && <p className="flex items-center gap-2"><Calendar className="size-3.5 text-gold" /> {format(new Date(ev.event_date), "PPP")}</p>}
-                    {ev.location && <p className="flex items-center gap-2"><MapPin className="size-3.5 text-gold" /> {ev.location}</p>}
+                    {ev.event_date && <p className="flex items-center gap-2"><Calendar className="size-3.5 text-gold" />{format(new Date(ev.event_date), "PPP")}</p>}
+                    {ev.location && <p className="flex items-center gap-2"><MapPin className="size-3.5 text-gold" />{ev.location}</p>}
                   </div>
                   {(ev.ticket_regular || ev.ticket_vip || ev.ticket_vvip) ? (
                     <div className="rounded-lg bg-secondary/60 p-3 text-xs">
                       <p className="font-semibold flex items-center gap-1 text-accent uppercase tracking-widest"><Ticket className="size-3" /> Tickets</p>
                       <p className="mt-1 text-primary">
-                        {ev.ticket_regular && <>Regular <b>KSh {ev.ticket_regular}</b></>}
-                        {ev.ticket_vip && <> · VIP <b>KSh {ev.ticket_vip}</b></>}
-                        {ev.ticket_vvip && <> · VVIP <b>KSh {ev.ticket_vvip}</b></>}
+                        {ev.ticket_regular && <>Regular <b>KSh {ev.ticket_regular.toLocaleString()}</b></>}
+                        {ev.ticket_vip && <> · VIP <b>KSh {ev.ticket_vip.toLocaleString()}</b></>}
+                        {ev.ticket_vvip && <> · VVIP <b>KSh {ev.ticket_vvip.toLocaleString()}</b></>}
                       </p>
-                      {ev.ticket_url && (
-                        <Button asChild size="sm" className="mt-3 w-full bg-gold text-ink hover:bg-gold/90"><a href={ev.ticket_url} target="_blank" rel="noreferrer">Buy tickets <ExternalLink className="size-3.5" /></a></Button>
-                      )}
+                      <Button asChild size="sm" className="mt-3 w-full bg-gold text-ink hover:bg-gold/90">
+                        <Link to="/programs">Register & Get Gate Pass →</Link>
+                      </Button>
                     </div>
                   ) : (
                     <p className="text-xs text-muted-foreground italic">Ticket info to be announced.</p>
@@ -135,11 +144,14 @@ function Index() {
                 </div>
               </article>
             ))}
+            {(!upcoming || upcoming.length === 0) && (
+              <p className="text-muted-foreground col-span-3">No upcoming events yet. Check back soon.</p>
+            )}
           </div>
         </div>
       </section>
 
-      {/* ABOUT (read more) */}
+      {/* ABOUT */}
       <section className="py-16 surface-ink">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 text-cream">
           <p className="text-gold text-xs uppercase tracking-[0.3em]">About us</p>
@@ -148,8 +160,8 @@ function Index() {
             <ReadMore label="Read more about the platform" preview={
               <p>The Inter–Universities Nexus Platform, a flagship of <strong className="text-gold">B.A Connect Organization</strong>, brings together students from universities, colleges and tertiary institutions across Kenya and beyond into one vibrant space for talent, creativity, innovation, learning and opportunity.</p>
             }>
-              <p className="text-cream/75">It was born from a simple belief: young people possess immense potential, but many lack the right platforms, exposure and mentorship to fully realise it. The Nexus exists to bridge that gap, providing a credible national stage where students discover their strengths, advance ideas and build practical skills for the future.</p>
-              <p className="text-cream/75">More than a showcase, the Nexus is a space for purposeful engagement — forums, summits, exhibitions, mentorship and competitions tackling the issues shaping our generation: entrepreneurship, employability, AI, financial literacy, leadership, mental health, innovation, inclusion and civic education.</p>
+              <p className="text-cream/75">It was born from a simple belief: young people possess immense potential, but many lack the right platforms, exposure and mentorship to fully realise it.</p>
+              <p className="text-cream/75">More than a showcase, the Nexus is a space for purposeful engagement — forums, summits, exhibitions, mentorship and competitions tackling the issues shaping our generation.</p>
             </ReadMore>
           </div>
           <div className="mt-6 flex flex-wrap gap-3">
@@ -159,7 +171,7 @@ function Index() {
         </div>
       </section>
 
-      {/* PILLARS PREVIEW */}
+      {/* PILLARS */}
       <section className="py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="max-w-2xl">
@@ -192,7 +204,7 @@ function Index() {
         </div>
       </section>
 
-      {/* ARTICLES PREVIEW */}
+      {/* ARTICLES */}
       <section className="py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="flex items-end justify-between flex-wrap gap-4 mb-8">
@@ -206,12 +218,12 @@ function Index() {
         </div>
       </section>
 
-      {/* FEEDBACK + SUGGESTIONS TABS */}
+      {/* FEEDBACK + SUGGESTIONS */}
       <section className="py-20 surface-ink">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <p className="text-gold text-xs uppercase tracking-[0.25em]">Your voice</p>
           <h2 className="mt-2 heading-display text-4xl text-cream">Talk to us. Tell us what's next.</h2>
-          <p className="mt-3 text-cream/70 max-w-xl">Two walls. One conversation. Comment on the Feedback Wall. Drop ideas on the Suggestion Wall.</p>
+          <p className="mt-3 text-cream/70 max-w-xl">Two walls. One conversation.</p>
           <Tabs defaultValue="feedback" className="mt-10">
             <TabsList className="bg-white/5 border border-gold/30">
               <TabsTrigger value="feedback" className="data-[state=active]:bg-gold data-[state=active]:text-ink">Feedback Wall</TabsTrigger>
@@ -236,7 +248,7 @@ function Index() {
         <div className="mx-auto max-w-5xl px-4 sm:px-6 rounded-3xl border-2 border-gold/40 bg-card p-8 sm:p-12 text-center shadow-gold">
           <p className="text-accent text-xs uppercase tracking-[0.25em]">Partner with us</p>
           <h2 className="mt-3 heading-display text-3xl sm:text-4xl text-primary">Build the future of Kenyan youth with us.</h2>
-          <p className="mt-3 text-muted-foreground max-w-2xl mx-auto">Organisations, institutions and companies — sponsor, mentor, host or co-create. Reach a national network of student leaders.</p>
+          <p className="mt-3 text-muted-foreground max-w-2xl mx-auto">Organisations, institutions and companies — sponsor, mentor, host or co-create.</p>
           <Button asChild size="lg" className="mt-6 bg-primary text-primary-foreground"><Link to="/partner">Become a partner →</Link></Button>
         </div>
       </section>
@@ -246,7 +258,7 @@ function Index() {
         <div className="mx-auto max-w-4xl px-4 sm:px-6 text-center">
           <Heart className="mx-auto size-8 text-accent" />
           <h2 className="mt-4 heading-display text-4xl sm:text-5xl text-primary">Your campus. Your voice. Your stage.</h2>
-          <p className="mt-4 text-muted-foreground max-w-xl mx-auto">Join thousands of students building Kenya's most ambitious youth platform. Get your official Member ID instantly.</p>
+          <p className="mt-4 text-muted-foreground max-w-xl mx-auto">Join thousands of students building Kenya's most ambitious youth platform.</p>
           <div className="mt-8 flex justify-center gap-3 flex-wrap">
             <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90"><Link to="/auth">Create your Member ID</Link></Button>
           </div>
