@@ -166,7 +166,7 @@ function Index() {
           </div>
           <div className="mt-6 flex flex-wrap gap-3">
             <Button asChild className="bg-gold text-ink hover:bg-gold/90"><Link to="/about">Full About page</Link></Button>
-            <Button asChild variant="outline" className="border-gold/40 text-cream hover:bg-gold hover:text-ink"><a href="https://baconnect.org" target="_blank" rel="noreferrer">B.A Connect Org. website <ExternalLink className="size-4" /></a></Button>
+            <Button asChild variant="outline" className="border-gold/40 text-cream hover:bg-gold hover:text-ink"><a href="https://baconnectorganization.lovable.app" target="_blank" rel="noreferrer">B.A Connect Org. website <ExternalLink className="size-4" /></a></Button>
           </div>
         </div>
       </section>
