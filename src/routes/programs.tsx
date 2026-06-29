@@ -69,9 +69,7 @@ function Programs() {
             )
           )}
           {!isLoading && !data?.length && <p className="text-muted-foreground">No programs published yet. Check back soon.</p>}
-          <div className="mt-12 text-center">
-            <Button asChild variant="outline"><a href="https://madfun.com" target="_blank" rel="noreferrer">Buy event tickets on Madfun</a></Button>
-          </div>
+          
         </div>
       </section>
       <SiteFooter />
