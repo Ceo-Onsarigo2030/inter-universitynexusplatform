@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { Session, User } from "@supabase/supabase-js";
+import { registerPushForCurrentUser } from "@/lib/push";
 
 export interface AuthState {
   session: Session | null;
@@ -14,9 +15,13 @@ export function useAuth(): AuthState {
   useEffect(() => {
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
       setState({ session, user: session?.user ?? null, loading: false });
+      if (session?.user && (_event === "SIGNED_IN" || _event === "TOKEN_REFRESHED")) {
+        void registerPushForCurrentUser(session.user.id);
+      }
     });
     supabase.auth.getSession().then(({ data }) => {
       setState({ session: data.session, user: data.session?.user ?? null, loading: false });
+      if (data.session?.user) void registerPushForCurrentUser(data.session.user.id);
     });
     return () => sub.subscription.unsubscribe();
   }, []);
