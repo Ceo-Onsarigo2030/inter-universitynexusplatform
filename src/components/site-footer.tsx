@@ -1,3 +1,4 @@
+// AUREUM CORE v1.0 — synced
 import { Link } from "@tanstack/react-router";
 import { Instagram, Facebook, Mail, Twitter, Linkedin, MessageCircle } from "lucide-react";
 import nexusLogo from "@/assets/nexus-logo.jpg.asset.json";
@@ -18,62 +19,14 @@ export function SiteFooter() {
             innovation and opportunity.
           </p>
           <div className="flex items-center gap-3 flex-wrap">
-            <a
-              href="https://www.facebook.com/uninexusconnect"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="size-10 rounded-full border border-gold/40 grid place-items-center text-gold hover:bg-gold hover:text-ink transition"
-              aria-label="Facebook"
-            >
-              <Facebook className="size-4" />
-            </a>
-            <a
-              href="https://www.twitter.com/uninexusconnect"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="size-10 rounded-full border border-gold/40 grid place-items-center text-gold hover:bg-gold hover:text-ink transition"
-              aria-label="Twitter / X"
-            >
-              <Twitter className="size-4" />
-            </a>
-            <a
-              href="https://www.instagram.com/uninexusconnect"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="size-10 rounded-full border border-gold/40 grid place-items-center text-gold hover:bg-gold hover:text-ink transition"
-              aria-label="Instagram"
-            >
-              <Instagram className="size-4" />
-            </a>
-            <a
-              href="https://www.linkedin.com/company/uninexusconnect"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="size-10 rounded-full border border-gold/40 grid place-items-center text-gold hover:bg-gold hover:text-ink transition"
-              aria-label="LinkedIn"
-            >
-              <Linkedin className="size-4" />
-            </a>
-            {/* WhatsApp — updated to real number */}
-            <a
-              href="https://wa.me/254114675350"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="size-10 rounded-full border border-gold/40 grid place-items-center text-gold hover:bg-gold hover:text-ink transition"
-              aria-label="WhatsApp"
-            >
-              <MessageCircle className="size-4" />
-            </a>
-            <a
-              href="mailto:uninexusplatformke@gmail.com"
-              className="size-10 rounded-full border border-gold/40 grid place-items-center text-gold hover:bg-gold hover:text-ink transition"
-              aria-label="Email"
-            >
-              <Mail className="size-4" />
-            </a>
+            <a href="https://www.facebook.com/uninexusconnect" target="_blank" rel="noopener noreferrer" className="size-10 rounded-full border border-gold/40 grid place-items-center text-gold hover:bg-gold hover:text-ink transition" aria-label="Facebook"><Facebook className="size-4" /></a>
+            <a href="https://www.twitter.com/uninexusconnect" target="_blank" rel="noopener noreferrer" className="size-10 rounded-full border border-gold/40 grid place-items-center text-gold hover:bg-gold hover:text-ink transition" aria-label="Twitter / X"><Twitter className="size-4" /></a>
+            <a href="https://www.instagram.com/uninexusconnect" target="_blank" rel="noopener noreferrer" className="size-10 rounded-full border border-gold/40 grid place-items-center text-gold hover:bg-gold hover:text-ink transition" aria-label="Instagram"><Instagram className="size-4" /></a>
+            <a href="https://www.linkedin.com/company/uninexusconnect" target="_blank" rel="noopener noreferrer" className="size-10 rounded-full border border-gold/40 grid place-items-center text-gold hover:bg-gold hover:text-ink transition" aria-label="LinkedIn"><Linkedin className="size-4" /></a>
+            <a href="https://wa.me/254114675350" target="_blank" rel="noopener noreferrer" className="size-10 rounded-full border border-gold/40 grid place-items-center text-gold hover:bg-gold hover:text-ink transition" aria-label="WhatsApp"><MessageCircle className="size-4" /></a>
+            <a href="mailto:uninexusplatformke@gmail.com" className="size-10 rounded-full border border-gold/40 grid place-items-center text-gold hover:bg-gold hover:text-ink transition" aria-label="Email"><Mail className="size-4" /></a>
           </div>
         </div>
-
         <div>
           <h4 className="text-gold text-sm font-semibold tracking-widest uppercase mb-3">Explore</h4>
           <ul className="space-y-2 text-sm text-cream/75">
@@ -83,44 +36,16 @@ export function SiteFooter() {
             <li><Link to="/auth" className="hover:text-gold">Join the Platform</Link></li>
           </ul>
         </div>
-
         <div>
           <h4 className="text-gold text-sm font-semibold tracking-widest uppercase mb-3">Contact</h4>
           <ul className="space-y-2 text-sm text-cream/75">
-            <li>
-              <a
-                href="https://www.instagram.com/uninexusconnect"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-gold transition"
-              >
-                Instagram: @uninexus_connect
-              </a>
-            </li>
-            <li>
-              <a
-                href="https://www.facebook.com/uninexusconnect"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-gold transition"
-              >
-                Facebook: UniNexus Connect
-              </a>
-            </li>
-            <li>
-              <a href="https://wa.me/254114675350" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition">
-                WhatsApp: +254 114 675 350
-              </a>
-            </li>
-            <li>
-              <a href="mailto:uninexusplatformke@gmail.com" className="hover:text-gold transition">
-                uninexusplatformke@gmail.com
-              </a>
-            </li>
+            <li><a href="https://www.instagram.com/uninexusconnect" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition">Instagram: @uninexus_connect</a></li>
+            <li><a href="https://www.facebook.com/uninexusconnect" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition">Facebook: UniNexus Connect</a></li>
+            <li><a href="https://wa.me/254114675350" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition">WhatsApp: +254 114 675 350</a></li>
+            <li><a href="mailto:uninexusplatformke@gmail.com" className="hover:text-gold transition">uninexusplatformke@gmail.com</a></li>
           </ul>
         </div>
       </div>
-
       <div className="border-t border-gold/15">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 py-5 flex flex-col sm:flex-row justify-between gap-2 text-xs text-cream/55">
           <p>© {new Date().getFullYear()} B.A Connect Organization. All rights reserved.</p>
