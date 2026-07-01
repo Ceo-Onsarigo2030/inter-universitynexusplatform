@@ -6,6 +6,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { format } from "date-fns";
 import { ArrowLeft } from "lucide-react";
 import type { ReactNode } from "react";
+import { ArticleComments } from "@/components/article-comments";
 
 export const Route = createFileRoute("/articles/$slug")({
   head: () => ({ meta: [
@@ -48,19 +49,23 @@ function ArticlePage() {
       return data;
     },
   });
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <SiteHeader />
       <section className="py-12 flex-1">
         <div className="mx-auto max-w-3xl px-4 sm:px-6">
           <Link to="/articles" className="inline-flex items-center gap-1 text-sm text-accent hover:underline mb-6"><ArrowLeft className="size-4" /> Back to articles</Link>
-          {isLoading || !data ? <p className="text-muted-foreground">Loading…</p> : (
+          {isLoading || !data ? (
+            <p className="text-muted-foreground">Loading…</p>
+          ) : (
             <article>
               <p className="text-[10px] uppercase tracking-widest text-accent font-semibold">{data.category}</p>
               <h1 className="mt-2 heading-display text-4xl sm:text-5xl text-primary">{data.title}</h1>
               {data.published_at && <p className="mt-2 text-sm text-muted-foreground">{format(new Date(data.published_at), "PPP")}</p>}
               {data.excerpt && <p className="mt-6 text-lg leading-relaxed text-foreground/80 italic border-l-4 border-gold pl-4">{data.excerpt}</p>}
               <div className="mt-6 text-foreground">{renderMarkdown(data.body)}</div>
+              <ArticleComments articleId={data.id} />
             </article>
           )}
         </div>
