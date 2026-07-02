@@ -1,4 +1,4 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { SiteHeader } from "@/components/site-header";
@@ -40,24 +40,30 @@ function renderMarkdown(text: string): ReactNode[] {
 
 function ArticlePage() {
   const { slug } = Route.useParams();
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["article", slug],
     queryFn: async () => {
       const { data, error } = await supabase.from("articles").select("*").eq("slug", slug).eq("status", "published").maybeSingle();
       if (error) throw error;
-      if (!data) throw notFound();
       return data;
     },
   });
-
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <SiteHeader />
       <section className="py-12 flex-1">
         <div className="mx-auto max-w-3xl px-4 sm:px-6">
           <Link to="/articles" className="inline-flex items-center gap-1 text-sm text-accent hover:underline mb-6"><ArrowLeft className="size-4" /> Back to articles</Link>
-          {isLoading || !data ? (
-            <p className="text-muted-foreground">Loading…</p>
+          {isLoading ? (
+            <p className="text-muted-foreground">Loading article…</p>
+          ) : error ? (
+            <p className="text-destructive">Couldn't load this article. Please try again.</p>
+          ) : !data ? (
+            <div className="rounded-xl border bg-card p-8 text-center">
+              <p className="heading-display text-2xl text-primary">Article not found</p>
+              <p className="mt-2 text-muted-foreground text-sm">This article may have been unpublished or moved.</p>
+              <Link to="/articles" className="inline-flex items-center gap-1 mt-4 text-accent underline"><ArrowLeft className="size-4" /> Browse all articles</Link>
+            </div>
           ) : (
             <article>
               <p className="text-[10px] uppercase tracking-widest text-accent font-semibold">{data.category}</p>
