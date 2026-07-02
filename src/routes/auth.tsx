@@ -11,8 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 import { lovable } from "@/integrations/lovable";
 import { toast } from "sonner";
 import { Mail, Lock, User as UserIcon, ArrowLeft } from "lucide-react";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
+
 import { z } from "zod";
 
 const searchSchema = z.object({
@@ -109,10 +108,17 @@ function GoogleButton({ redirectTo }: { redirectTo: string }) {
   const [loading, setLoading] = useState(false);
   async function go() {
     setLoading(true);
+    // NOTE: Google OAuth requires a same-origin PUBLIC callback URL.
+    // Sending users to a protected route (e.g. /dashboard) breaks the flow.
+    // We land back on /auth and the useEffect above pushes them to redirectTo
+    // once a session is detected.
     const res = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin + redirectTo,
+      redirect_uri: `${window.location.origin}/auth?redirect=${encodeURIComponent(redirectTo)}`,
     });
-    if (res.error) { toast.error("Google sign-in failed"); setLoading(false); }
+    if (res.error) {
+      toast.error("Google sign-in failed");
+      setLoading(false);
+    }
   }
   return (
     <Button onClick={go} disabled={loading} variant="outline" className="w-full border-input">
@@ -120,6 +126,7 @@ function GoogleButton({ redirectTo }: { redirectTo: string }) {
     </Button>
   );
 }
+
 
 function ResetForm() {
   const [email, setEmail] = useState("");
@@ -205,14 +212,26 @@ function SignUpForm({ redirectTo }: { redirectTo: string }) {
         </div>
       </div>
       <div className="space-y-1.5">
-        <Label htmlFor="su-uni">University / College / Tertiary institution</Label>
-        <Select value={university} onValueChange={setUniversity}>
-          <SelectTrigger id="su-uni"><SelectValue placeholder="Select your institution" /></SelectTrigger>
-          <SelectContent className="max-h-72">
-            {(unis ?? []).map((u) => (<SelectItem key={u.name} value={u.name}>{u.name}</SelectItem>))}
-          </SelectContent>
-        </Select>
-      </div>
+  <Label htmlFor="su-uni">University / College / Tertiary institution</Label>
+  <Input
+    id="su-uni"
+    list="uni-list"
+    value={university}
+    onChange={(e) => setUniversity(e.target.value)}
+    required
+    placeholder="Type to search your institution…"
+    autoComplete="off"
+  />
+  <datalist id="uni-list">
+    {(unis ?? []).map((u) => (
+      <option key={u.name} value={u.name} />
+    ))}
+  </datalist>
+  <p className="text-[10px] text-muted-foreground">
+    Start typing — {unis?.length ?? 0} institutions listed. If yours is missing, type it in exactly.
+  </p>
+</div>
+      
       <div className="space-y-1.5">
         <Label htmlFor="su-email">Email</Label>
         <div className="relative">
