@@ -11,7 +11,6 @@ import { useQuery } from "@tanstack/react-query";
 import { lovable } from "@/integrations/lovable";
 import { toast } from "sonner";
 import { Mail, Lock, User as UserIcon, ArrowLeft } from "lucide-react";
-
 import { z } from "zod";
 
 const searchSchema = z.object({
